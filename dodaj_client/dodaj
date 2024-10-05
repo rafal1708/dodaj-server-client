@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+
+import argparse, mariadb, configparser
+import add_book, add_game, check
+
+config = configparser.ConfigParser()
+config.read("config_client.ini")
+db_dbname = config['wishlist_conf']['db_name']
+remote_sql_username = config['wishlist_conf']['remote_sql_username']
+remote_sql_password = config['wishlist_conf']['remote_sql_password']
+ip_server = config['wishlist_conf']['ip_server']
+
+parser = argparse.ArgumentParser(description="Program do zarządzania bazą danych książek",
+                                 usage="dodaj https://lubimyczytac.pl/ksiazka/*/JAKAS_KSIAZKA - dodaje książkę do bazy danych",
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument('-d', '--delete', type=str, help="Usuwa książkę z podanego linku. Użycie: dodaj -d https://lubimyczytac.pl/ksiazka/*/JAKAS_KSIAZKA.")
+parser.add_argument('-n', '--notes', type=str, help="Dodaje książkę wraz z komentarzem. Użycie: dodaj https://lubimyczytac.pl/ksiazka/*/JAKAS_KSIAZKA -n 'Jakis komentarz'")
+parser.add_argument("link", type=str, nargs="?", help="Link do książki na 'lubimyczytac.pl'")
+
+args = parser.parse_args()
+
+
+
+def insert_into_database(item, note):
+    #db = sqlite3.connect("http://192.168.88.154:5050/mojabaza.db")
+    db = mariadb.connect(host="192.168.88.154", port=3306, user="wishlist", password="haselko", database="mojabaza")
+    db = mariadb.connect(host=ip_server, port=3306, user=remote_sql_username, password=remote_sql_password, database=db_dbname)
+
+    cursor = db.cursor()
+    if item == "books":
+        book_title, author, desc, link, ean, full_rate, cover_path, book_type = add_book.add_book(args)
+        #print(ean)
+        cursor.execute(
+            "INSERT INTO my_wishlist (title, author, description, link, ean, rate, notes, cover, type) VALUES(?,?,?,?,?,?,?,?,?)",
+            (book_title, author, desc, link, ean, full_rate, note, cover_path, book_type))
+    elif item == "games":
+        game_title, author, desc, link, ean, full_rate, cover_path, item_type = add_game.add_game(args)
+        cursor.execute(
+            "INSERT INTO my_wishlist (title, author, description, link, ean, rate, notes, cover, type) VALUES(?,?,?,?,?,?,?,?,?)",
+            (game_title, author, desc, link, ean, full_rate, note, cover_path, item_type))
+    db.commit()
+    db.close()
+
+
+def main(args):
+    if args.delete:
+        if check.link_validation(args.delete):
+            if check.is_item_in_database(args.delete):
+                #db = sqlite3.connect("mojabaza.db")
+                db = mariadb.connect(host="192.168.88.154", port=3306, user="wishlist",
+                                     password="haselko", database="mojabaza")
+
+                cursor = db.cursor()
+                cursor.execute("DELETE FROM my_wishlist WHERE link = ?", (args.delete,))
+                db.commit()
+                db.close()
+                print("Usunięte!")
+            else:
+                print("Nie ma tego w bazie")
+        else:
+            print("Podaj poprawny link do usunięcia, np.: https://lubimyczytac.pl/ksiazka/*/JAKAS_KSIAZKA")
+
+    elif args.notes:
+        if check.link_validation(args.link):
+            if check.is_item_in_database(args.link):
+                db = mariadb.connect(host="192.168.88.154", port=3306, user="wishlist",
+                                     password="haselko", database="mojabaza")
+
+                #db = sqlite3.connect("mojabaza.db")
+                cursor = db.cursor()
+                question = input("Ta pozycja jest już w bazie. Wybierz co chcesz zrobić:\n1)Usuń starą notatkę i dodaj nową."
+                             "\n2)Dodaj tę notatkę do istniejącej w bazie."
+                             "\n3)Skoro jest w bazie, pomiń wszystko!\n")
+                while question:
+                    if question == "1":
+                        cursor.execute("UPDATE my_wishlist SET notes=? WHERE link = ?", (args.notes, args.link,))
+                        db.commit()
+                        print("Zapisano nową notatkę")
+                        question = False
+                    elif question == "2":
+                        cursor.execute("UPDATE my_wishlist SET notes=notes || ' ' || ? WHERE link = ?", (args.notes, args.link,))
+                        db.commit()
+                        print("Zaktualizowano notatkę")
+                        question = False
+                    elif question == "3":
+                        question = False
+                    else:
+                        question = input("Masz tylko te trzy rzeczy do wyboru:\n1)Zaktualizuj notatkę.\n2)Dodaj tę notatkę do istniejącej w bazie\n3)Skoro jest w bazie, pomiń wszystko!\n")
+                    db.close()
+            else:
+                item = check.select_category(args.link)
+                if item == "books":
+                    try:
+                        insert_into_database("books", args.notes)
+                    except:
+                        print("Sprawdź czy link jest poprawny")
+                elif item == "games":
+                    try:
+                        insert_into_database("games", args.notes)
+                    except:
+                        print("Sprawdź czy link jest poprawny")
+        else:
+            print("Sprawdź czy link jest poprawny")
+
+    else:
+        if check.link_validation(args.link):
+            if check.is_item_in_database(args.link):
+                print("Ta pozycja jest już w bazie")
+            else:
+                item = check.select_category(args.link)
+                notes = ""
+                if item == "books":
+                    try:
+                        insert_into_database("books", notes)
+                        print("Dodano nową książkę")
+                    except AttributeError:
+                        print("Sprawdź czy link prowadzi do książki")
+                elif item == "games":
+                    try:
+                        insert_into_database("games", notes)
+                        print("Dodano nową grę")
+                    except AttributeError:
+                        print("Sprawdź czy link prowadzi do gry")
+        else:
+            print("Sprawdź czy link jest poprawny")
+
+
+main(args)

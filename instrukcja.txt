@@ -1,0 +1,32 @@
+I Konfiguracja w SQL:
+
+1) Utworzenie bazy danych:
+
+a) create database wishlist_db;
+b) use wishlist_db;
+c) CREATE TABLE my_wishlist ( cover TEXT, title TEXT, author TEXT, description TEXT, link TEXT, ean TEXT, rate FLOAT, notes TEXT, type TEXT, username TEXT)
+
+2) Utworzenie użytkownika poprzez którego będą dodawane nowe pozycje do bazy danych
+a) CREATE user '<remote_user>'@'<ip>' IDENTIFIED BY <password>;
+b) GRANT SELECT, INSERT, DELETE, UPDATE ON wishlist_db.* TO '<remote_user>'@'<ip>';
+
+<remote_user> - zdefiniowanego tu użytkownika należy umieścić w config_client.ini jako wartość dla remote_sql_username
+<password> - zdefiniowane tu hasło należy umieścić w config_client.ini jako wartość dla remote_sql_password
+<ip> - należy podać adres swojej sieci LAN. Jako ostatni oktet należy wstawić %, np. 192.168.1.%
+
+
+3) Utworzenie lokalnego użytkownika bazy danych, poprzez którego dane będą odczytywane:
+
+a) CREATE user '<local_user>'@'localhost' IDENTIFIED BY <local_password>;
+b) GRANT SELECT ON wishlist_db.* TO '<local_user>'@'localhost';
+
+<local_user> - zdefiniowanego tu użytkoniwka należy umieścić w config_server.ini jako wartość dla local_sql_username
+<local_password> - zdefiniowane tu hasło należy umieścić w config_server.ini jako wartość dla local_sql_password
+
+II Uzupełnienie pozostałych danych w config_client.ini
+
+ip_server = adres IP serwera
+ssh_username = nazwa użytkownika na serwerze, dla połączenia ssh
+ssh_password =  hasło dla tego użytkownika
+
+SSH używane jest do przesłania pliku okładki na serwer.

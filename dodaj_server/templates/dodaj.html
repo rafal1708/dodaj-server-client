@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="static/sqlread.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <ul class="horizontal-menu">
+        <li><a href="/ksiazki">Książki</a></li>
+        <li><a href="/komiksy">Komiksy</a></li>
+        <li><a href="/gry">Gry</a></li>
+    </ul>
+
+<table>
+    <thead>
+    <tr>
+        <th>Okładka</th>
+        <th>Tytuł</th>
+        <th>Autor</th>
+        <th>Opis</th>
+        <th>EAN/Ocena</th>
+        <th>Uwagi</th>
+    </tr>
+    </thead>
+        <tbody>
+        {% for entry in results %}
+
+        <tr>
+            <td><a href="{{entry[4]}}"><img src={{entry[0]}}></a></td>
+            <td class="book-title"><a href="{{entry[4]}}">{{entry[1]}}</a></td>
+            <td>{{entry[2]}}</td>
+            <td>
+                <div class="truncate-container">
+                    <div class="truncate">
+                        {{entry[3]}}
+                        </div>
+                    <div class="full-text">{{entry[3]}}</div>
+                </div>
+            </td>
+            <td>EAN:{{entry[5]}}<br><br>Ocena czytelników: {{entry[6]}}/10</td>
+            <td>
+                <div class="truncate-container">
+                    <div class="truncate">
+                        {{entry[7]}}
+                        </div>
+                    <div class="full-text">{{entry[7]}}</div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
