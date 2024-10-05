@@ -1,4 +1,6 @@
-I Konfiguracja w SQL:
+I Należy umieścić folder "dodaj_client" na komputerze z któ©ego będą wysyłane linki, a folder "dodaj_server" na serwerze. 
+
+II Konfiguracja w SQL:
 
 1) Utworzenie bazy danych:
 
@@ -23,10 +25,14 @@ b) GRANT SELECT ON wishlist_db.* TO '<local_user>'@'localhost';
 <local_user> - zdefiniowanego tu użytkoniwka należy umieścić w config_server.ini jako wartość dla local_sql_username
 <local_password> - zdefiniowane tu hasło należy umieścić w config_server.ini jako wartość dla local_sql_password
 
-II Uzupełnienie pozostałych danych w config_client.ini
+III Uzupełnienie pozostałych danych w config_client.ini
 
 ip_server = adres IP serwera
 ssh_username = nazwa użytkownika na serwerze, dla połączenia ssh
 ssh_password =  hasło dla tego użytkownika
 
 SSH używane jest do przesłania pliku okładki na serwer.
+
+IV Program "dodaj" działa niezależnie od tego, czy "start" na serwerze jest uruchomiony czy nie. "dodaj" wysyła dane do bazy sql na serwerze.
+"start" na serwerze odczytuje tę bazę danych, i przy pomocy Flask, uruchamia stronę na porcie 5050, z wynikami.
+
