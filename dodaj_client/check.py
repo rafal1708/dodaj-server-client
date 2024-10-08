@@ -1,5 +1,4 @@
-import sqlite3
-import mariadb
+import mysql.connector
 import configparser
 
 def link_validation(link):
@@ -19,9 +18,9 @@ def is_item_in_database(link):
     remote_sql_username = config['wishlist_conf']['remote_sql_username']
     remote_sql_password = config['wishlist_conf']['remote_sql_password']
     ip_server = config['wishlist_conf']['ip_server']
-    db = mariadb.connect(host=ip_server, port=3306, user=remote_sql_username, password=remote_sql_password, database=db_dbname)
+    db = mysql.connector.connect(host=ip_server, port=3306, user=remote_sql_username, password=remote_sql_password, database=db_dbname)
     cursor = db.cursor()
-    cursor.execute("SELECT * from my_wishlist WHERE link = ?", (link,))
+    cursor.execute("SELECT * from my_wishlist WHERE link = %s", (link,))
     book = cursor.fetchall()
     db.close()
     if book:
