@@ -1,4 +1,4 @@
-I Należy umieścić folder "dodaj_client" na komputerze z któ©ego będą wysyłane linki, a folder "dodaj_server" na serwerze. 
+I Należy umieścić folder "dodaj_client" na komputerze z którego będą wysyłane linki, a folder "dodaj_server" na serwerze. 
 
 II Konfiguracja w SQL:
 
@@ -35,4 +35,20 @@ SSH używane jest do przesłania pliku okładki na serwer.
 
 IV Program "dodaj" działa niezależnie od tego, czy "start" na serwerze jest uruchomiony czy nie. "dodaj" wysyła dane do bazy sql na serwerze.
 "start" na serwerze odczytuje tę bazę danych, i przy pomocy Flask, uruchamia stronę na porcie 5050, z wynikami.
+
+IV Problemy i wymagania:
+
+1) Wymaga instalacji Flask
+2) Wymaga mysql connectora ale..
+3) Działa od python 3.7
+pip install mysql-connector-python
+
+4) Na pythonie poniżej 3.7 wymaga odpowiednio niżej wersji mysql connector:
+pip uninstall mysql-connector-python
+pip install mysql-connector-python==8.0.23
+
+5) Być może trzeba będzie doinstalować coś jeszcze więc warto działać w środowisku wirtualnym
+python3 -m venv ./dodaj_wirtualne
+source ./bin/activate
+
 
