@@ -17,7 +17,7 @@ db_name = config["wishlist_conf"]["db_name"]
 def read_sql(book_type):
     db = mysql.connector.connect(host=localhost, port=3306, user=local_sql_username, password=local_sql_password, database=db_name) 
     cursor = db.cursor()
-    cursor.execute("SELECT cover, title, author, description, link, ean, rate, notes FROM books WHERE type=?;", (book_type,))
+    cursor.execute("SELECT cover, title, author, description, link, ean, rate, notes FROM my_wishlist WHERE type=?;", (book_type,))
     result = cursor.fetchall()
     return result
 
@@ -60,16 +60,16 @@ def api_book():
     tag = request.args.get("tag")
     category = request.args.get("category")
 
-    query = "SELECT title, author, link, rate, notes FROM books WHERE 1=1"
+    query = "SELECT title, author, link, rate, notes FROM my_wishlist WHERE 1=1"
     args = []
     if author:
-        query += " AND author LIKE '%'|| ? ||'%'"
+        query += " AND author LIKE CONCAT ('%',?,'%')"
         args.append(author)
     if rate:
         query += " AND rate >= ?"
         args.append(float(rate))
     if tag:
-        query += " AND (description LIKE '%'|| ? ||'%' OR notes LIKE '%'|| ? ||'%')"
+        query += " AND (description LIKE CONCAT ('%',?,'%') OR notes LIKE CONCAT ('%',?,'%'))"
         args.append(tag)
         args.append(tag)
     if category:
