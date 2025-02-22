@@ -13,9 +13,9 @@ def add_game(args):
     raw_game_title = soup.find(id="game-title-cnt").getText()
     game_title = raw_game_title.strip()
     cleared_game_title = game_title.replace(" ", "")
-    with open(f"./static/book_cover/{cleared_game_title}.jpg", "wb") as file:
+    with open(f"./static/cover/{cleared_game_title}.jpg", "wb") as file:
         file.write(image_link.content)
-    cover_path = f"static/book_cover/{cleared_game_title}.jpg"
+    cover_path = f"static/cover/{cleared_game_title}.jpg"
     author = soup.find(class_="un-link").getText()
     item_type = "gra komputerowa"
     try:
