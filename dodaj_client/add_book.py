@@ -29,7 +29,7 @@ def add_book(args):
     cover_path = f"./{cleared_title}.jpg"
     remote_control.send_cover_image(cover_path, f"{cleared_title}.jpg")
     os.remove(f"./{cleared_title}.jpg")
-    remote_cover_path = f'static/book_cover/{cleared_title}.jpg'
+    remote_cover_path = f'static/cover/{cleared_title}.jpg'
     return book_title, author, description, link, ean, full_rate, remote_cover_path, book_type
 
 
