@@ -14,6 +14,6 @@ def send_cover_image(link_to_cover, file_name):
     ssh.load_system_host_keys()
     ssh.connect(ip_server, username=ssh_username, password=ssh_password)
     sftp = ssh.open_sftp()
-    sftp.put(link_to_cover, f'/home/rafalmalinka/wirtualdodaj/static/book_cover/{file_name}')
+    sftp.put(link_to_cover, f'/home/rafalmalinka/git/dodaj-server-client/dodaj_server/static/book_cover/{file_name}')
     sftp.close()
     ssh.close()
