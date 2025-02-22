@@ -14,10 +14,10 @@ db_name = config["wishlist_conf"]["db_name"]
 
 
 
-def read_sql(book_type):
+def read_sql(wish_type):
     db = mysql.connector.connect(host=localhost, port=3306, user=local_sql_username, password=local_sql_password, database=db_name) 
     cursor = db.cursor()
-    cursor.execute("SELECT cover, title, author, description, link, ean, rate, notes FROM my_wishlist WHERE type=%s;", (book_type,))
+    cursor.execute("SELECT cover, title, author, description, link, ean, rate, notes FROM my_wishlist WHERE type=%s;", (wish_type,))
     result = cursor.fetchall()
     return result
 

@@ -9,7 +9,7 @@ b) use wishlist_db;
 c) CREATE TABLE my_wishlist ( cover TEXT, title TEXT, author TEXT, description TEXT, link TEXT, ean TEXT, rate FLOAT, notes TEXT, type TEXT, username TEXT)
 
 2) Utworzenie użytkownika poprzez którego będą dodawane nowe pozycje do bazy danych
-a) CREATE user '<remote_user>'@'<ip>' IDENTIFIED BY <password>;
+a) CREATE user '<remote_user>'@'<ip>' IDENTIFIED BY '<password>';
 b) GRANT SELECT, INSERT, DELETE, UPDATE ON wishlist_db.* TO '<remote_user>'@'<ip>';
 
 <remote_user> - zdefiniowanego tu użytkownika należy umieścić w config_client.ini jako wartość dla remote_sql_username
@@ -27,6 +27,7 @@ b) GRANT SELECT ON wishlist_db.* TO '<local_user>'@'localhost';
 
 III Uzupełnienie pozostałych danych w config_client.ini
 
+path_to_cover = ścieżka bezwzględna do folderu z okładkami na serwerze, np /home/<username>/dodaj-server-client/dodaj_server/static/cover
 ip_server = adres IP serwera
 ssh_username = nazwa użytkownika na serwerze, dla połączenia ssh
 ssh_password =  hasło dla tego użytkownika
@@ -50,5 +51,12 @@ pip install mysql-connector-python==8.0.23
 5) Być może trzeba będzie doinstalować coś jeszcze więc warto działać w środowisku wirtualnym
 python3 -m venv ./dodaj_wirtualne
 source ./bin/activate
+
+6) Inne wymagane:
+
+Na kliencie:
+pip install requests
+pip install paramiko
+pip install bs4
 
 
