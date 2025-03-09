@@ -13,9 +13,12 @@ def add_game(args):
     raw_game_title = soup.find(id="game-title-cnt").getText()
     game_title = raw_game_title.strip()
     cleared_game_title = game_title.replace(" ", "")
-    with open(f"./static/cover/{cleared_game_title}.jpg", "wb") as file:
+    with open(f'./{cleared_title}.jpg', "wb") as file:
         file.write(image_link.content)
-    cover_path = f"static/cover/{cleared_game_title}.jpg"
+    cover_path = f'./{cleared_title}.jpg'
+    remote_control.send_cover_image(cover_path, f'{cleared_title}.jpg')
+    os.remove(f'./{cleared_title}.jpg')
+    remote_cover_path = f'static/cover/{cleared_title}.jpg'
     author = soup.find(class_="un-link").getText()
     item_type = "gra komputerowa"
     try:
