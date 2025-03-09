@@ -23,12 +23,12 @@ def add_movie(args):
         link_parts = link.split("/")
         title_and_year = link_parts[4]
         raw_movie_title = title_and_year.split("-")[0] 
-        year = title_and_year.split("-")[1]
+        year = title_and_year.split("-")[1] #Zapisane na zaś, na razie nie jest używane
         movie_title = urllib.parse.unquote(raw_movie_title.replace("+"," "))
         movie_type = link_parts[3]
     desc = soup.find_all(itemprop="description")
     description = desc[0].get_text()
-    ean = year
+    ean = "Nie dotyczy"
     author = ""
     director = soup.find("a", itemprop="director")
     creator = soup.find("a", itemprop="creator")
