@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import remote_control
 import os
+import re
 
 def add_book(args):
     link = args.link
@@ -13,7 +14,8 @@ def add_book(args):
     full_rate = float(full_rate)
     raw_book_title = soup.find(class_="book__title").getText()
     book_title = raw_book_title.strip()
-    cleared_title = book_title.replace(" ", "")
+    title = book_title.replace(" ", "")
+    cleared_title = re.sub(r'[^A-Za-z0-9\s]', '', title)
     ean = soup.find(property="books:isbn")["content"]
     image = soup.find(class_="overflow-hidden book-cover__link")["data-cover"]
     author = soup.find(property="books:author")["content"]

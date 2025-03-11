@@ -12,7 +12,8 @@ def add_game(args):
     image_link = requests.get(image)
     raw_game_title = soup.find(id="game-title-cnt").getText()
     game_title = raw_game_title.strip()
-    cleared_game_title = game_title.replace(" ", "")
+    game_title2 = game_title.replace(" ", "")
+    cleared_title = re.sub(r'[^A-Za-z0-9\s]', '', game_title2)
     with open(f'./{cleared_title}.jpg', "wb") as file:
         file.write(image_link.content)
     cover_path = f'./{cleared_title}.jpg'

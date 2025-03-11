@@ -39,8 +39,11 @@ def add_movie(args):
         author = creator.get_text(strip=True)
     else:
         author = "Być może wielu autorów"
-    
-    raw_rate = soup.find("span", itemprop="ratingValue").getText().strip()
-    full_rate = float(raw_rate.replace(",","."))
+    try:
+        raw_rate = soup.find("span", itemprop="ratingValue").getText().strip()
+        full_rate = float(raw_rate.replace(",","."))
+    except:
+        full_rate = 0
+
     return movie_title, author, description, link, ean, full_rate, remote_cover_path, movie_type
 
