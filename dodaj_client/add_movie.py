@@ -28,7 +28,12 @@ def add_movie(args):
         movie_type = link_parts[3]
     desc = soup.find_all(itemprop="description")
     description = desc[0].get_text()
-    ean = "Nie dotyczy"
+    raw_tags = soup.find_all("span",{"itemprop":"genre"})
+    tags_list = []
+    for i in raw_tags:
+        genre = i.text.strip()
+        tags_list.append(genre)
+        ean = ", ".join(tags_list) # iteruje po tagach filmu, tworzy listę a potem iteruje po liście, tworząc string. To nie żaden EAN :D Nazwę zostawiłem by pasowała do nazw przekazywanych wartości do bazy danych ale warto to poukładać bardziej logicznie
     author = ""
     director = soup.find("a", itemprop="director")
     creator = soup.find("a", itemprop="creator")
