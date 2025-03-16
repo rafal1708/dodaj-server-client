@@ -43,6 +43,7 @@ app = Flask(__name__)
 @app.route("/gry")
 @app.route("/filmy")
 @app.route("/seriale")
+@app.route("/planszowki")
 def ksiazki():
     if request.path == "/komiksy":
         results = read_sql("komiks")
@@ -54,6 +55,8 @@ def ksiazki():
         results = read_sql("film")
     elif request.path == "/seriale":
         results = read_sql("serial")
+    elif request.path == "/planszowki":
+        results = read_sql("gra planszowa")
     else:
         return render_template("dodaj.html")
     return render_template("dodaj.html", results = results)

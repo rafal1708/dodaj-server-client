@@ -16,7 +16,8 @@ def add_book(args):
     book_title = raw_book_title.strip()
     title = book_title.replace(" ", "")
     cleared_title = re.sub(r'[^A-Za-z0-9\s]', '', title)
-    ean = soup.find(property="books:isbn")["content"]
+    ean_nr = soup.find(property="books:isbn")["content"]
+    ean = f"EAN: {ean_nr}"
     image = soup.find(class_="overflow-hidden book-cover__link")["data-cover"]
     author = soup.find(property="books:author")["content"]
     image_link = requests.get(image)

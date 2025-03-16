@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import argparse, mysql.connector, configparser
-import add_book, add_game, add_movie, check
+import add_book, add_game, add_movie, add_boardgame, check
 
 config = configparser.ConfigParser()
 config.read("config_client.ini")
@@ -37,6 +37,11 @@ def insert_into_database(item, note):
             (game_title, author, desc, link, ean, full_rate, note, cover_path, item_type))
     elif item == "movies":
         movie_title, author, desc, link, ean, full_rate, cover_path, item_type = add_movie.add_movie(args)
+        cursor.execute(
+            "INSERT INTO my_wishlist (title, author, description, link, ean, rate, notes, cover, type) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            (movie_title, author, desc, link, ean, full_rate, note, cover_path, item_type))    
+    elif item == "boardgame":
+        movie_title, author, desc, link, ean, full_rate, cover_path, item_type = add_boardgame.add_boardgame(args)
         cursor.execute(
             "INSERT INTO my_wishlist (title, author, description, link, ean, rate, notes, cover, type) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",
             (movie_title, author, desc, link, ean, full_rate, note, cover_path, item_type))    
@@ -95,6 +100,11 @@ def main(args):
                         insert_into_database("movies", args.notes)
                     except:
                         print("Sprawdź czy link jest poprawny")
+                if item == "boardgame":
+                    try:
+                        insert_into_database("boardgame", args.notes)
+                    except:
+                        print("Sprawdź czy link jest poprawny")
                 elif item == "games":
                     try:
                         insert_into_database("games", args.notes)
@@ -122,6 +132,12 @@ def main(args):
                         print("Dodano nowy film/serial")
                     except AttributeError:
                         print("Sprawdź czy link prowadzi do filmu/serialu")
+                if item == "boardgame":
+                    try:
+                        insert_into_database("boardgame", notes)
+                        print("Dodano nową planszówkę")
+                    except AttributeError:
+                        print("Sprawdź czy link prowadzi do gry planszowej")
                 elif item == "games":
                     try:
                         insert_into_database("games", notes)

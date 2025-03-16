@@ -3,7 +3,7 @@ import configparser
 
 def link_validation(link):
     try:
-        if link.startswith("https://lubimyczytac.pl/ksiazka/") or link.startswith("https://www.filmweb.pl/") or link.startswith("https://www.gry-online.pl/gry/"):
+        if link.startswith("https://lubimyczytac.pl/ksiazka/") or link.startswith("https://planszeo.pl/gry-planszowe") or link.startswith("https://www.filmweb.pl/") or link.startswith("https://www.gry-online.pl/gry/"):
             return True
         else:
             return False
@@ -33,5 +33,7 @@ def select_category(link):
         return "books"
     if link.startswith("https://www.filmweb.pl"):
         return "movies"
+    if link.startswith("https://planszeo.pl/gry-planszowe"):
+        return "boardgame"
     else:
         return "games"
